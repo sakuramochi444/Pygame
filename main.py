@@ -16,7 +16,7 @@ def main():
     stage1 = s.Stage1(chip_s)
     stage2 = s.Stage2(chip_s)
     stage3 = s.Stage3(chip_s)
-    stage = stage1
+    stage = stage3
     chara_p, chara_s, chara_imgs, m_vec = d.chara()
     chara_d = 0
 
@@ -52,10 +52,13 @@ def main():
                 if stage.block_pos1 == af_pos:
                     if not stage.invert_tiles and stage.move_block1(chara_p.x, chara_p.y, m_vec[cmd_move]):
                         chara_p += m_vec[cmd_move]
-                elif stage.block_pos2 == af_pos:
+                if stage.block_pos2 == af_pos:
                     if not stage.invert_tiles and stage.move_block2(chara_p.x, chara_p.y, m_vec[cmd_move]):
                         chara_p += m_vec[cmd_move]
-                elif d.is_walkable(stage.map_data, int(af_pos.x), int(af_pos.y), stage.invert_tiles):
+                elif d.is_walkable(stage.map_data, int(af_pos.x), int(af_pos.y)):
+                    if not (stage.block_pos1 == af_pos or stage.block_pos2 == af_pos):
+                        chara_p += m_vec[cmd_move]
+                if stage.invert_tiles and (stage.block_pos1 == af_pos or stage.block_pos2 == af_pos):
                     chara_p += m_vec[cmd_move]
                 chara_d = cmd_move
                 stage.activate_invert(chara_p)
