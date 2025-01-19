@@ -1,6 +1,32 @@
 import pygame as pg
 import data as d
 
+class Stage0:
+    def __init__(self, chip_size):
+        self.chip_size = chip_size
+        
+        # フォントの読み込み
+        try:
+            self.font = pg.font.Font('./material/TanukiMagic.ttf', 74)  # 大きなフォント
+            self.sub_font = pg.font.Font('./material/TanukiMagic.ttf', 36)  # 小さなフォント
+        except FileNotFoundError:
+            raise FileNotFoundError("フォントファイルが見つかりません。./material/TanukiMagic.ttf を確認してください。")
+
+    def draw(self, screen, chip_size):
+        screen.fill(pg.Color('WHITE'))  # 背景を白に設定
+        
+        # タイトルとサブタイトルの描画
+        title_surface = self.font.render("白黒パズル", True, pg.Color('BLACK'))
+        subtitle_surface = self.sub_font.render("SPACEキーを押してスタート！", True, pg.Color('BLACK'))
+
+        # 中央に配置
+        title_rect = title_surface.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 - 20))
+        subtitle_rect = subtitle_surface.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 + 40))
+
+        # 描画
+        screen.blit(title_surface, title_rect)
+        screen.blit(subtitle_surface, subtitle_rect)
+
 class Stage1:
     def __init__(self, chip_size):
         # ステージ1のマップデータ
@@ -220,3 +246,28 @@ class Stage3:
         block_image = self.tile_images["block"] if not self.invert_tiles else self.tile_images["unblock"]
         screen.blit(block_image, self.block_pos1 * chip_size)
         screen.blit(block_image, self.block_pos2 * chip_size)
+
+class Stage4:
+    def __init__(self, chip_size):
+        self.chip_size = chip_size
+        
+        # フォントの読み込み
+        try:
+            self.font = pg.font.Font('./material/TanukiMagic.ttf', 74)  # 大きなフォント
+            self.sub_font = pg.font.Font('./material/TanukiMagic.ttf', 36)  # 小さなフォント
+        except FileNotFoundError:
+            raise FileNotFoundError("フォントファイルが見つかりません。./material/TanukiMagic.ttf を確認してください。")
+
+        self.goal_pos = pg.Vector2(-1, -1)  # ダミーのゴール位置
+
+    def draw(self, screen, chip_size):
+        screen.fill(pg.Color('WHITE'))  # 背景を白に設定
+        
+        # タイトルとサブタイトルの描画
+        title_surface = self.font.render("Coming soon", True, pg.Color('BLACK'))
+
+        # 中央に配置
+        title_rect = title_surface.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 - 20))
+
+        # 描画
+        screen.blit(title_surface, title_rect)

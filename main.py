@@ -13,10 +13,12 @@ def main():
     font = pg.font.Font(None, 15)
     exit_code = '000'
 
+    stage0 = s.Stage0(chip_s)
     stage1 = s.Stage1(chip_s)
     stage2 = s.Stage2(chip_s)
     stage3 = s.Stage3(chip_s)
-    stage = stage1
+    stage4 = s.Stage4(chip_s)
+    stage = stage3
     chara_p, chara_s, chara_imgs, m_vec = d.chara()
     chara_d = 0
 
@@ -52,7 +54,7 @@ def main():
                 if stage.block_pos1 == af_pos:
                     if not stage.invert_tiles and stage.move_block1(chara_p.x, chara_p.y, m_vec[cmd_move]):
                         chara_p += m_vec[cmd_move]
-                if stage.block_pos2 == af_pos:
+                elif stage.block_pos2 == af_pos:
                     if not stage.invert_tiles and stage.move_block2(chara_p.x, chara_p.y, m_vec[cmd_move]):
                         chara_p += m_vec[cmd_move]
                 elif d.is_walkable(stage.map_data, int(af_pos.x), int(af_pos.y)):
@@ -70,7 +72,10 @@ def main():
                 exit_flag = True
                 exit_code = '001'
             elif event.type == pg.KEYDOWN:
-                if event.key in [pg.K_UP, pg.K_w]:
+                if event.key == pg.K_SPACE:
+                    if stage == stage0:
+                        stage = stage1
+                elif event.key in [pg.K_UP, pg.K_w]:
                     cmd_move = 0
                 elif event.key in [pg.K_RIGHT, pg.K_d]:
                     cmd_move = 1
@@ -90,19 +95,23 @@ def main():
                         stage = stage3
                     chara_p, chara_s, chara_imgs, m_vec = d.chara()
 
-        if chara_p == stage.goal_pos:
-            if stage == stage1:
-                stage = stage2  # ステージ2を有効化する
-                chara_p = pg.Vector2(2, 7)  # 初期位置に戻す
-            elif stage == stage2:
-                stage = stage3
-                chara_p = pg.Vector2(2,7)
+        if stage != stage0 or stage != stage4:
+            if chara_p == stage.goal_pos:
+                if stage == stage1:
+                    stage = stage2  # ステージ2を有効化する
+                    chara_p = pg.Vector2(2, 7)  # 初期位置に戻す
+                elif stage == stage2:
+                    stage = stage3
+                    chara_p = pg.Vector2(2, 7)
+                elif stage == stage3:
+                    stage = stage4
+                    chara_p = pg.Vector2(2, 7)
 
         screen.fill(pg.Color('WHITE'))
         stage.draw(screen, chip_s)
-        handle_move(cmd_move)
-
-        screen.blit(chara_imgs[direction_map[chara_d]], chara_p * chip_s)
+        if stage != stage0 and stage != stage4:
+            handle_move(cmd_move)
+            screen.blit(chara_imgs[direction_map[chara_d]], chara_p * chip_s)
         screen.blit(font.render(f'{pg.time.get_ticks() // 1000:05}', True, 'BLACK'), (10, 10))
 
         pg.display.update()
