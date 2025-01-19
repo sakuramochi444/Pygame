@@ -11,6 +11,8 @@ class Stage0:
             self.sub_font = pg.font.Font('./material/TanukiMagic.ttf', 36)  # 小さなフォント
         except FileNotFoundError:
             raise FileNotFoundError("フォントファイルが見つかりません。./material/TanukiMagic.ttf を確認してください。")
+        
+        self.goal_pos = pg.Vector2(-1, -1)  # ダミーのゴール位置
 
     def draw(self, screen, chip_size):
         screen.fill(pg.Color('WHITE'))  # 背景を白に設定
