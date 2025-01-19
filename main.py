@@ -16,7 +16,7 @@ def main():
     stage1 = s.Stage1(chip_s)
     stage2 = s.Stage2(chip_s)
     stage3 = s.Stage3(chip_s)
-    stage = stage3
+    stage = stage1
     chara_p, chara_s, chara_imgs, m_vec = d.chara()
     chara_d = 0
 
